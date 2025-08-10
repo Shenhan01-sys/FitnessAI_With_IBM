@@ -33,7 +33,7 @@ export default function WeeklySchedule({ completed, onToggleCompletion, disabled
 
   // Map AI schedule to the format with IDs
   const days = aiSchedule?.schedule 
-    ? aiSchedule.schedule.map((day: any, index: number) => ({
+    ? aiSchedule.schedule.map((day: {name: string, workout: string}, index: number) => ({
         id: ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'][index],
         name: day.name,
         workout: day.workout
