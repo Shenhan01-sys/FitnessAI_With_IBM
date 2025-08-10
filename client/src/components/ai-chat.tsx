@@ -26,24 +26,29 @@ export default function AIChat() {
     scrollToBottom();
   }, [messages]);
 
-  const getAIResponse = (userInput: string): string => {
-    const input = userInput.toLowerCase();
-    if (input.includes('protein')) {
-      return "Protein penting untuk membangun otot. Sumber baiknya adalah dada ayam, ikan, dan telur.";
-    } else if (input.includes('pemanasan')) {
-      return "Pemanasan wajib dilakukan 5-10 menit sebelum latihan inti untuk mencegah cedera.";
-    } else if (input.includes('cardio')) {
-      return "Cardio baik untuk kesehatan jantung. Lakukan 2-3 kali seminggu, bisa setelah latihan beban atau di hari terpisah.";
-    } else if (input.includes('diet') || input.includes('makan')) {
-      return "Diet seimbang sangat penting. Fokus pada protein, karbohidrat kompleks, dan lemak sehat. Jangan lupa minum air yang cukup!";
-    } else if (input.includes('tidur') || input.includes('istirahat')) {
-      return "Tidur 7-9 jam per malam sangat penting untuk recovery. Hindari gadget 1 jam sebelum tidur untuk kualitas tidur yang lebih baik.";
-    } else {
-      return "Maaf, saya belum mengerti pertanyaan itu. Coba tanyakan hal lain seputar dunia fitness.";
+  const getAIResponse = async (userInput: string): Promise<string> => {
+    try {
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ message: userInput })
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to get AI response');
+      }
+
+      const data = await response.json();
+      return data.response;
+    } catch (error) {
+      console.error('AI Chat Error:', error);
+      return "Maaf, saya sedang mengalami gangguan. Silakan coba lagi nanti.";
     }
   };
 
-  const handleSendMessage = (e: React.FormEvent) => {
+  const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newMessage.trim()) return;
 
@@ -56,12 +61,20 @@ export default function AIChat() {
     setNewMessage('');
     setIsTyping(true);
 
-    // Simulate AI response after 1 second
-    setTimeout(() => {
-      const aiResponse: Message = { role: 'ai', text: getAIResponse(messageText) };
+    // Get AI response
+    try {
+      const aiResponseText = await getAIResponse(messageText);
+      const aiResponse: Message = { role: 'ai', text: aiResponseText };
       setMessages(prev => [...prev, aiResponse]);
+    } catch (error) {
+      const errorResponse: Message = { 
+        role: 'ai', 
+        text: "Maaf, terjadi kesalahan. Silakan coba lagi." 
+      };
+      setMessages(prev => [...prev, errorResponse]);
+    } finally {
       setIsTyping(false);
-    }, 1000);
+    }
   };
 
   return (

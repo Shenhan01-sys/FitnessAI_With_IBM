@@ -34,3 +34,10 @@ export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
 export type UserProfile = typeof userProfiles.$inferSelect;
 export type InsertUserProfile = z.infer<typeof insertUserProfileSchema>;
+
+// AI Plans interface
+export interface AIPlans {
+  workoutPlan: string;
+  nutritionPlan: string;
+  sleepPlan: string;
+}

@@ -1,3 +1,4 @@
+import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 
@@ -8,7 +9,19 @@ interface WeeklyScheduleProps {
 }
 
 export default function WeeklySchedule({ completed, onToggleCompletion, disabled = false }: WeeklyScheduleProps) {
-  const days = [
+  const { data: aiSchedule, isLoading: isLoadingSchedule } = useQuery({
+    queryKey: ['/api/generate-schedule'],
+    queryFn: async () => {
+      const response = await fetch('/api/generate-schedule', { method: 'POST' });
+      if (!response.ok) {
+        throw new Error('Failed to generate AI schedule');
+      }
+      return response.json();
+    },
+    retry: 1,
+  });
+
+  const defaultDays = [
     { id: 'mon', name: 'Senin', workout: 'Latihan Dada & Trisep' },
     { id: 'tue', name: 'Selasa', workout: 'Latihan Punggung & Bisep' },
     { id: 'wed', name: 'Rabu', workout: 'Istirahat Aktif' },
@@ -18,10 +31,26 @@ export default function WeeklySchedule({ completed, onToggleCompletion, disabled
     { id: 'sun', name: 'Minggu', workout: 'Istirahat Total' }
   ];
 
+  // Map AI schedule to the format with IDs
+  const days = aiSchedule?.schedule 
+    ? aiSchedule.schedule.map((day: any, index: number) => ({
+        id: ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'][index],
+        name: day.name,
+        workout: day.workout
+      }))
+    : defaultDays;
+
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Jadwal Latihan Mingguan Saya</CardTitle>
+        <CardTitle>
+          Jadwal Latihan Mingguan Saya
+          {isLoadingSchedule && (
+            <span className="text-sm font-normal text-gray-500 ml-2">
+              (Menghasilkan dengan AI...)
+            </span>
+          )}
+        </CardTitle>
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
