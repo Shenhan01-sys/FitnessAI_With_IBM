@@ -48,9 +48,12 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes (August 21, 2025)
 - **AI Implementation**: Successfully integrated IBM Granite 3.3-8b-instruct via Replicate API
-- **Polling System**: Implemented async prediction creation and polling for AI responses
+- **Polling System**: Implemented async prediction creation and polling for AI responses  
 - **API Configuration**: Configured with real API_TOKEN_IBM and MODEL_IBM_VERSION_HASH
 - **Response Quality**: Verified working AI responses with detailed, contextual fitness guidance
+- **User Personalization**: Added name field to user profiles for personalized experience
+- **UI Updates**: Dashboard now greets users by name and AI chatbot uses personalized greetings
+- **Bug Fixes**: Resolved component prop interface mismatches and TypeScript errors
 
 ## Authentication & Session Management
 - **Current State**: Demo user system without authentication (userId: "demo-user")

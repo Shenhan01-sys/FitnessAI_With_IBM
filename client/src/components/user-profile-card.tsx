@@ -2,10 +2,13 @@ import { Card, CardContent } from "@/components/ui/card";
 import { User } from "lucide-react";
 
 interface UserProfileCardProps {
-  userGoal: string;
+  profile: {
+    name: string;
+    goal: string;
+  };
 }
 
-export default function UserProfileCard({ userGoal }: UserProfileCardProps) {
+export default function UserProfileCard({ profile }: UserProfileCardProps) {
   const goalText: Record<string, string> = {
     cutting: 'Cutting (Menurunkan Lemak)',
     bulking: 'Bulking (Menambah Otot)',
@@ -20,8 +23,8 @@ export default function UserProfileCard({ userGoal }: UserProfileCardProps) {
             <User className="w-6 h-6 text-primary-600" />
           </div>
           <div>
-            <h3 className="font-semibold text-gray-900">Ahmad Rizki</h3>
-            <p className="text-sm text-gray-600">Target: {goalText[userGoal] || 'Belum ditentukan'}</p>
+            <h3 className="font-semibold text-gray-900">{profile.name}</h3>
+            <p className="text-sm text-gray-600">Target: {goalText[profile.goal] || 'Belum ditentukan'}</p>
           </div>
         </div>
       </CardContent>

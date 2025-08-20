@@ -1,10 +1,13 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 interface ProgressCardProps {
-  completed: Record<string, boolean>;
+  profile: {
+    completed: Record<string, boolean> | null;
+  };
 }
 
-export default function ProgressCard({ completed }: ProgressCardProps) {
+export default function ProgressCard({ profile }: ProgressCardProps) {
+  const completed = profile.completed || {};
   const completedCount = Object.values(completed).filter(Boolean).length;
   const totalCount = 7;
   const percentage = Math.round((completedCount / totalCount) * 100);

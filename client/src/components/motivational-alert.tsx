@@ -1,12 +1,12 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { CheckCircle } from "lucide-react";
 
 interface MotivationalAlertProps {
-  isVisible: boolean;
-  onHide: () => void;
+  onClose: () => void;
 }
 
-export default function MotivationalAlert({ isVisible, onHide }: MotivationalAlertProps) {
+export default function MotivationalAlert({ onClose }: MotivationalAlertProps) {
+  const [isVisible, setIsVisible] = useState(true);
   const motivationalPhrases = [
     'Kerja Bagus! Terus Jaga Konsistensi!',
     'Selesai! Satu langkah lebih dekat ke tujuanmu!',
@@ -18,13 +18,12 @@ export default function MotivationalAlert({ isVisible, onHide }: MotivationalAle
   const randomPhrase = motivationalPhrases[Math.floor(Math.random() * motivationalPhrases.length)];
 
   useEffect(() => {
-    if (isVisible) {
-      const timer = setTimeout(() => {
-        onHide();
-      }, 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [isVisible, onHide]);
+    const timer = setTimeout(() => {
+      setIsVisible(false);
+      onClose();
+    }, 3000);
+    return () => clearTimeout(timer);
+  }, [onClose]);
 
   if (!isVisible) return null;
 
