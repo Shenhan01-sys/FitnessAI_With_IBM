@@ -9,10 +9,14 @@ interface Message {
   text: string;
 }
 
-export default function AIChat() {
+interface AIChatProps {
+  userName?: string;
+}
+
+export default function AIChat({ userName }: AIChatProps = {}) {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
-    { role: 'ai', text: 'Halo! Saya FitAI, siap membantu perjalanan fitness Anda. Ada yang bisa saya bantu?' }
+    { role: 'ai', text: `Halo${userName ? ` ${userName}` : ''}! Saya FitAI, siap membantu perjalanan fitness Anda. Ada yang bisa saya bantu?` }
   ]);
   const [newMessage, setNewMessage] = useState('');
   const [isTyping, setIsTyping] = useState(false);

@@ -111,7 +111,41 @@ export default function Dashboard() {
         isLoading={createProfileMutation.isPending}
       />
 
-      <AIChat userName={profile?.name} />
+      <AIChat />
+    </div>
+      <Navigation />
+      
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Main Content */}
+          <div className="lg:col-span-2">
+            <WeeklySchedule 
+              completed={profile?.completed || {}}
+              onToggleCompletion={handleToggleCompletion}
+              disabled={updateCompletionMutation.isPending}
+            />
+          </div>
+          
+          {/* Sidebar */}
+          <div className="space-y-6">
+            <UserProfileCard userGoal={profile?.goal || ''} />
+            <ProgressCard completed={profile?.completed || {}} />
+          </div>
+        </div>
+      </main>
+
+      <OnboardingModal 
+        isOpen={showOnboarding} 
+        onComplete={handleOnboardingComplete}
+        isLoading={createProfileMutation.isPending}
+      />
+      
+      <MotivationalAlert 
+        isVisible={showAlert}
+        onHide={() => setShowAlert(false)}
+      />
+      
+      <AIChat />
     </div>
   );
 }

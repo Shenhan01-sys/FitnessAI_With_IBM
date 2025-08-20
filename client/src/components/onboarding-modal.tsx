@@ -13,6 +13,7 @@ interface OnboardingModalProps {
 
 export default function OnboardingModal({ isOpen, onComplete, isLoading = false }: OnboardingModalProps) {
   const [formData, setFormData] = useState({
+    name: '',
     weight: '',
     bodyFat: '',
     muscleMass: '',
@@ -23,6 +24,7 @@ export default function OnboardingModal({ isOpen, onComplete, isLoading = false 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onComplete({
+      name: formData.name,
       weight: parseInt(formData.weight),
       bodyFat: parseInt(formData.bodyFat),
       muscleMass: parseInt(formData.muscleMass),
@@ -48,6 +50,18 @@ export default function OnboardingModal({ isOpen, onComplete, isLoading = false 
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <Label htmlFor="name">Nama</Label>
+              <Input
+                id="name"
+                type="text"
+                value={formData.name}
+                onChange={(e) => handleInputChange('name', e.target.value)}
+                placeholder="Ahmad Rizki"
+                required
+                disabled={isLoading}
+              />
+            </div>
             <div>
               <Label htmlFor="weight">Berat Badan (kg)</Label>
               <Input
@@ -112,7 +126,7 @@ export default function OnboardingModal({ isOpen, onComplete, isLoading = false 
             <Button 
               type="submit" 
               className="w-full"
-              disabled={isLoading || !formData.weight || !formData.bodyFat || !formData.muscleMass || !formData.age || !formData.goal}
+              disabled={isLoading || !formData.name || !formData.weight || !formData.bodyFat || !formData.muscleMass || !formData.age || !formData.goal}
             >
               {isLoading ? "Membuat..." : "Buat Rencana Saya"}
             </Button>

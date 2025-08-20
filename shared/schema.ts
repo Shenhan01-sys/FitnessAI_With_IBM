@@ -12,6 +12,7 @@ export const users = pgTable("users", {
 export const userProfiles = pgTable("user_profiles", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   userId: varchar("user_id").references(() => users.id).notNull(),
+  name: text("name").notNull(),
   weight: integer("weight").notNull(),
   bodyFat: integer("body_fat").notNull(),
   muscleMass: integer("muscle_mass").notNull(),
